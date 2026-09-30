@@ -1,0 +1,21 @@
+{
+  "name": "muhammad-ahmed-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full Stack Portfolio & Admin Dashboard for Muhammad Ahmed",
+  "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"magenta,cyan\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend",
+    "seed": "npm run seed --prefix backend",
+    "seed:admin": "npm run seed:admin --prefix backend",
+    "seed:projects": "npm run seed:projects --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

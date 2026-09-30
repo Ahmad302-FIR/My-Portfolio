@@ -1,0 +1,15 @@
+export const contactConfig = {
+  name: 'Muhammad Ahmed',
+  title: 'Full Stack MERN Developer',
+  email: 'info.ahmadkhan.com@gmail.com',
+  phone: '+92 329 5664981',
+  whatsappUrl: 'https://wa.me/923295664981',
+  linkedin: 'https://www.linkedin.com/in/muhammad-ahmed-6867a5370',
+  linkedinDisplay: 'Muhammad Ahmed',
+  github: 'https://github.com/Ahmad302-FIR',
+  githubUsername: 'Ahmad302-FIR',
+  location: 'Pakistan',
+  locationDetail: 'Peshawar, Pakistan',
+  availability: 'Open to Remote, Freelance, Internship, Contract, and Full-Time Opportunities',
+  resumePath: '/Muhammad-Ahmed-Resume.pdf',
+} as const;

@@ -1,0 +1,108 @@
+import type { Project } from '../types/project';
+
+export const initialProjects: Project[] = [
+  {
+    _id: 'proj-digital-medical',
+    id: 'digital-medical',
+    slug: 'digital-medical',
+    title: 'Digital Medical',
+    category: 'Healthcare Platform',
+    status: 'In Development',
+    liveUrl: 'https://digital-medical-tau.vercel.app/',
+    shortDescription:
+      'A healthcare platform for patient records, appointment booking, doctor and clinic discovery, family/dependent profiles, and healthcare management.',
+    description:
+      'A comprehensive digital healthcare platform designed to digitalize clinical operations, patient records, appointment scheduling, doctor discovery, and dependent family healthcare profiles with separate medical identities and multi-role access.',
+    imageUrl: '', // Configurable via admin panel / database
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Git', 'GitHub'],
+    features: [
+      'Patient Dashboard',
+      'Doctor & Clinic Discovery',
+      'Appointment Booking',
+      'Family / Dependent Profiles',
+      'Separate Medical Identities',
+      'Medical Records',
+      'Prescriptions & Lab Reports',
+      'Follow-up Management',
+      'Multi-Role System',
+      'Responsive Dashboard UI',
+    ],
+    featured: true,
+    order: 1,
+    color: '#22D3EE',
+    createdAt: '2024-06-15T10:00:00.000Z',
+    updatedAt: '2024-09-25T14:30:00.000Z',
+  },
+  {
+    _id: 'proj-akr-restaurant',
+    id: 'akr-restaurant',
+    slug: 'akr-restaurant',
+    title: 'AKR Restaurant',
+    category: 'Full Stack MERN Application',
+    status: 'Live',
+    liveUrl: 'https://frontend-sepia-eight-58.vercel.app/',
+    shortDescription:
+      'A full-stack restaurant platform with authentication, OTP verification, reservation requests, admin approval workflow, reservation tracking, and email notifications.',
+    description:
+      'A full-stack restaurant platform with end-to-end MERN architecture. Implements JWT authentication, OTP email verification, automated reservation requests, admin approval workflow, live reservation tracking, Cloudinary media storage, and transactional emails.',
+    imageUrl: '', // Configurable via admin panel / database
+    technologies: [
+      'React',
+      'TypeScript',
+      'Tailwind CSS',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'Mongoose',
+      'JWT',
+      'Nodemailer',
+      'Multer',
+      'Cloudinary',
+    ],
+    features: [
+      'User Registration & Login',
+      'OTP Email Verification',
+      'Reservation Request Workflow',
+      'Admin Approve / Reject System',
+      'Reservation Tracking',
+      'Protected Admin Routes',
+      'Image Upload & Cloudinary',
+      'Email Notifications',
+      'Responsive Frontend',
+      'Production Deployment',
+    ],
+    featured: true,
+    order: 2,
+    color: '#8B5CF6',
+    createdAt: '2024-05-10T09:00:00.000Z',
+    updatedAt: '2024-09-20T11:00:00.000Z',
+  },
+  {
+    _id: 'proj-laptop-shop',
+    id: 'laptop-shop',
+    slug: 'laptop-shop',
+    title: 'Laptop Shop',
+    category: 'E-commerce / Web Application',
+    status: 'Live',
+    liveUrl: 'https://laptop-shop-nine.vercel.app/',
+    shortDescription:
+      'A responsive laptop shopping web application with modern product browsing UI.',
+    description:
+      'A modern e-commerce style web application showcasing responsive laptop browsing, category filtering, search, and clean shopping UI patterns with direct WhatsApp order placement deployed on Vercel.',
+    imageUrl: '', // Configurable via admin panel / database
+    technologies: ['React', 'JavaScript', 'CSS / Tailwind', 'GitHub', 'Vercel'],
+    features: [
+      'Product Browsing',
+      'Responsive Layout Across Devices',
+      'Category & Hardware Filters',
+      'Search & Filtering',
+      'Clean Modern UI Design',
+      'Vercel Deployment',
+    ],
+    featured: true,
+    order: 3,
+    color: '#14B8A6',
+    createdAt: '2024-04-01T08:00:00.000Z',
+    updatedAt: '2024-08-15T16:00:00.000Z',
+  },
+];
