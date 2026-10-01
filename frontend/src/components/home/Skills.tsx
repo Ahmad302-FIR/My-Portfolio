@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import SectionWrapper from '../common/SectionWrapper';
 import SectionHeading from '../common/SectionHeading';
-import { skillCategories, techMarqueeItems } from '../../data/portfolioData';
+import { skillCategories as defaultSkillCategories, techMarqueeItems as defaultTechMarqueeItems } from '../../data/portfolioData';
 import { staggerContainer, cardVariants } from '../../utils/animations';
+import { usePortfolioSettings } from '../../context/PortfolioContext';
 
 const categoryColor: Record<string, string> = {
   Frontend: 'text-cyan-400 border-cyan-400/20 bg-cyan-400/5',
@@ -21,6 +23,33 @@ const categoryHeader: Record<string, string> = {
 };
 
 export default function Skills() {
+  const { skills, settings } = usePortfolioSettings();
+
+  const categories = useMemo(() => {
+    if (!skills || skills.length === 0) {
+      return defaultSkillCategories;
+    }
+
+    // Group active skills by category maintaining order
+    const categoryMap = new Map<string, { label: string; skills: { name: string }[] }>();
+
+    for (const skill of skills) {
+      if (skill.active === false) continue;
+      const cat = skill.category || 'Additional';
+      if (!categoryMap.has(cat)) {
+        categoryMap.set(cat, { label: cat, skills: [] });
+      }
+      categoryMap.get(cat)!.skills.push({ name: skill.name });
+    }
+
+    return Array.from(categoryMap.values());
+  }, [skills]);
+
+  const marqueeItems =
+    settings.techMarqueeItems && settings.techMarqueeItems.length > 0
+      ? settings.techMarqueeItems
+      : defaultTechMarqueeItems;
+
   return (
     <SectionWrapper id="skills" className="py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -38,7 +67,7 @@ export default function Skills() {
           viewport={{ once: true, margin: '-5%' }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {skillCategories.map((category) => {
+          {categories.map((category) => {
             const colorClass = categoryColor[category.label] ?? 'text-slate-300 border-slate-600/30 bg-slate-800/30';
             const headerClass = categoryHeader[category.label] ?? 'from-slate-500/20 to-transparent';
             return (
@@ -74,14 +103,12 @@ export default function Skills() {
 
         {/* Marquee */}
         <div className="mt-14 overflow-hidden relative">
-          <div className="absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-[#07111F] to-transparent pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-[#07111F] to-transparent pointer-events-none" />
           <motion.div
             className="flex gap-6 w-max"
             animate={{ x: ['0%', '-50%'] }}
             transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
           >
-            {[...techMarqueeItems, ...techMarqueeItems].map((item, i) => (
+            {[...marqueeItems, ...marqueeItems].map((item, i) => (
               <span
                 key={`${item}-${i}`}
                 className="px-5 py-2.5 rounded-full border border-slate-700/40 bg-slate-800/30 text-slate-500 text-sm font-medium whitespace-nowrap"

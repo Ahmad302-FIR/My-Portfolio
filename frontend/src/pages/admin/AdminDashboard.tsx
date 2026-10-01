@@ -53,12 +53,12 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Top Welcome Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 rounded-3xl border border-slate-700/60 bg-gradient-to-r from-[#0D1828] via-[#101D30] to-[#0D1828] backdrop-blur-md shadow-xl">
+      <div className="admin-welcome-banner flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 bg-gradient-to-r from-slate-50 via-white to-slate-50 dark:from-[#0D1828] dark:via-[#101D30] dark:to-[#0D1828] backdrop-blur-md shadow-sm dark:shadow-xl">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
             Welcome back, Muhammad Ahmed
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Dynamic Project Management & Portfolio Operations Center
           </p>
         </div>
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-3">
           <Link
             to="/admin/projects/new"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-[#07111F] shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all"
           >
             <Plus size={15} />
             <span>Add New Project</span>
@@ -75,9 +75,9 @@ export default function AdminDashboard() {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:text-slate-100 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-slate-100 hover:border-slate-400 dark:hover:border-slate-500 transition-colors shadow-xs dark:shadow-none"
           >
-            <ExternalLink size={14} className="text-cyan-400" />
+            <ExternalLink size={14} className="text-cyan-500 dark:text-cyan-400" />
             <span className="hidden sm:inline">Live Site</span>
           </a>
         </div>
@@ -123,28 +123,28 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Recent Projects Table/Cards (2 cols) */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-2xl border border-slate-700/60 bg-[#0D1828]/80 backdrop-blur-md overflow-hidden shadow-xl">
-            <div className="flex items-center justify-between p-5 border-b border-slate-800">
+          <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/80 backdrop-blur-md overflow-hidden shadow-xs dark:shadow-xl">
+            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <FolderGit2 size={16} className="text-cyan-400" />
-                <h3 className="text-sm font-bold text-slate-100">
+                <FolderGit2 size={16} className="text-cyan-500 dark:text-cyan-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   Recent Projects
                 </h3>
               </div>
               <Link
                 to="/admin/projects"
-                className="text-xs font-semibold text-cyan-400 hover:underline inline-flex items-center gap-1"
+                className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline inline-flex items-center gap-1"
               >
                 View All ({totalProjects}) <ArrowRight size={13} />
               </Link>
             </div>
 
             {/* Project List */}
-            <div className="divide-y divide-slate-800">
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {recentProjects.map((project) => (
                 <div
                   key={project._id || project.id || project.slug}
-                  className="flex items-center justify-between p-4 hover:bg-slate-800/30 transition-colors gap-4"
+                  className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors gap-4"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     <div
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                       {project.title[0]}
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-semibold text-slate-200 truncate">
+                      <h4 className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                         {project.title}
                       </h4>
                       <p className="text-[11px] text-slate-500 truncate">
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                     <StatusBadge status={project.status} size="sm" />
                     <Link
                       to={`/admin/projects/edit/${project._id || project.slug}`}
-                      className="px-2.5 py-1 text-[11px] font-medium rounded-lg border border-slate-700 bg-slate-800/60 text-slate-300 hover:text-slate-100 hover:border-slate-500 transition-colors"
+                      className="px-2.5 py-1 text-[11px] font-medium rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:border-slate-300 dark:hover:border-slate-500 transition-colors"
                     >
                       Edit
                     </Link>
@@ -185,13 +185,13 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               to="/admin/projects/new"
-              className="flex items-center gap-3 p-4 rounded-2xl border border-slate-700/60 bg-[#0D1828]/60 hover:bg-[#101D30] hover:border-cyan-400/40 transition-all group"
+              className="flex items-center gap-3 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/60 hover:bg-slate-50 dark:hover:bg-[#101D30] hover:border-cyan-400/40 transition-all shadow-xs dark:shadow-none group"
             >
-              <div className="h-10 w-10 rounded-xl bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="h-10 w-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Plus size={18} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-200">Add New Project</p>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Add New Project</p>
                 <p className="text-[11px] text-slate-500">
                   Deploy live links & descriptions
                 </p>
@@ -200,16 +200,16 @@ export default function AdminDashboard() {
 
             <Link
               to="/admin/messages"
-              className="flex items-center gap-3 p-4 rounded-2xl border border-slate-700/60 bg-[#0D1828]/60 hover:bg-[#101D30] hover:border-violet-400/40 transition-all group"
+              className="flex items-center gap-3 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/60 hover:bg-slate-50 dark:hover:bg-[#101D30] hover:border-violet-400/40 transition-all shadow-xs dark:shadow-none group"
             >
-              <div className="h-10 w-10 rounded-xl bg-violet-400/10 border border-violet-400/30 text-violet-400 flex items-center justify-center group-hover:scale-105 transition-transform relative">
+              <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-600 dark:text-violet-400 flex items-center justify-center group-hover:scale-105 transition-transform relative">
                 <Mail size={18} />
                 {unreadMsgCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-cyan-400 ring-2 ring-[#0D1828]" />
+                  <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-cyan-400 ring-2 ring-white dark:ring-[#0D1828]" />
                 )}
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-200">
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Inbox Inquiries ({unreadMsgCount})
                 </p>
                 <p className="text-[11px] text-slate-500">
@@ -222,10 +222,10 @@ export default function AdminDashboard() {
 
         {/* Right Column: Activity Feed (1 col) */}
         <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-700/60 bg-[#0D1828]/80 backdrop-blur-md p-5 shadow-xl">
-            <div className="flex items-center gap-2 pb-4 border-b border-slate-800">
-              <Activity size={16} className="text-cyan-400" />
-              <h3 className="text-sm font-bold text-slate-100">
+          <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/80 backdrop-blur-md p-5 shadow-xs dark:shadow-xl">
+            <div className="flex items-center gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+              <Activity size={16} className="text-cyan-500 dark:text-cyan-400" />
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Recent Project Activity
               </h3>
             </div>
@@ -241,20 +241,20 @@ export default function AdminDashboard() {
                     <span
                       className={`h-2 w-2 rounded-full mt-1.5 flex-shrink-0 ${
                         act.type === 'create'
-                          ? 'bg-emerald-400'
+                          ? 'bg-emerald-500'
                           : act.type === 'update'
-                          ? 'bg-cyan-400'
-                          : 'bg-rose-400'
+                          ? 'bg-cyan-500'
+                          : 'bg-rose-500'
                       }`}
                     />
                     <div className="space-y-0.5 min-w-0">
-                      <p className="text-xs font-semibold text-slate-200 leading-snug">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-snug">
                         {act.title}
                       </p>
-                      <p className="text-[11px] text-slate-400 leading-relaxed truncate">
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed truncate">
                         {act.description}
                       </p>
-                      <span className="text-[10px] text-slate-500 block pt-0.5 font-mono">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 block pt-0.5 font-mono">
                         {new Date(act.timestamp).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -266,11 +266,11 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500">
               <span className="flex items-center gap-1">
                 <Calendar size={12} /> Sync Engine: Local / Dynamic
               </span>
-              <span className="text-emerald-400 font-medium">Ready for API</span>
+              <span className="text-emerald-500 font-medium">Ready for API</span>
             </div>
           </div>
         </div>

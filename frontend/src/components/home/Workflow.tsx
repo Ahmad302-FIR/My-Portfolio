@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { Lightbulb, Layout, Code2, CheckCircle, GitBranch, UploadCloud, TrendingUp } from 'lucide-react';
+import { Lightbulb, Layout, Code2, CheckCircle, GitBranch, UploadCloud, TrendingUp, Zap, Shield, Sparkles } from 'lucide-react';
 import SectionWrapper from '../common/SectionWrapper';
 import SectionHeading from '../common/SectionHeading';
-import { workflowSteps } from '../../data/portfolioData';
+import { workflowSteps as defaultWorkflowSteps } from '../../data/portfolioData';
 import { contactConfig } from '../../data/contact';
 import { staggerContainer, cardVariants } from '../../utils/animations';
+import { usePortfolioSettings } from '../../context/PortfolioContext';
 
 const iconMap: Record<string, React.ElementType> = {
   lightbulb: Lightbulb,
@@ -14,6 +15,9 @@ const iconMap: Record<string, React.ElementType> = {
   'git-branch': GitBranch,
   'upload-cloud': UploadCloud,
   'trending-up': TrendingUp,
+  zap: Zap,
+  shield: Shield,
+  sparkles: Sparkles,
 };
 
 const stepColors = [
@@ -26,7 +30,7 @@ const stepColors = [
   'text-green-400 border-green-400/30 bg-green-400/5',
 ];
 
-const githubPractices = [
+const defaultGithubPractices = [
   { label: 'Clean Repository Structure', desc: 'Organized folders with separation of concerns' },
   { label: 'Reusable Components', desc: 'DRY patterns across projects' },
   { label: 'Git / GitHub Workflow', desc: 'Feature branches, commits, pull requests' },
@@ -37,13 +41,30 @@ const githubPractices = [
 ];
 
 export default function Workflow() {
+  const { settings } = usePortfolioSettings();
+
+  const steps =
+    settings.workflowSteps && settings.workflowSteps.length > 0
+      ? settings.workflowSteps.filter((s) => s.active !== false)
+      : defaultWorkflowSteps;
+
+  const practices =
+    settings.githubPractices && settings.githubPractices.length > 0
+      ? settings.githubPractices
+      : defaultGithubPractices;
+
+  const githubUrl = settings.github || contactConfig.github;
+
   return (
     <SectionWrapper id="workflow" className="py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Development Workflow"
-          title="How I Build Products"
-          description="A structured process from idea to production — consistently applied across every project."
+          eyebrow={settings.workflowEyebrow || 'Development Workflow'}
+          title={settings.workflowTitle || 'How I Build Products'}
+          description={
+            settings.workflowDescription ||
+            'A structured process from idea to production — consistently applied across every project.'
+          }
           align="center"
         />
 
@@ -53,10 +74,10 @@ export default function Workflow() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-5%' }}
-          className="flex flex-wrap justify-center gap-3 mb-16"
+          className="flex flex-wrap justify-center gap-3.5 mb-16"
         >
-          {workflowSteps.map((step, i) => {
-            const Icon = iconMap[step.icon] ?? Code2;
+          {steps.map((step, i) => {
+            const Icon = (step.icon && iconMap[step.icon]) || Code2;
             const color = stepColors[i % stepColors.length];
             return (
               <div key={step.label} className="flex items-center gap-2">
@@ -65,10 +86,13 @@ export default function Workflow() {
                   whileHover={{ y: -4, scale: 1.04, transition: { duration: 0.2 } }}
                   className={`rounded-xl border px-4 py-3 flex flex-col items-center gap-1.5 min-w-[80px] ${color}`}
                 >
+                  <span className="text-[10px] font-mono opacity-60 font-bold">
+                    0{i + 1}
+                  </span>
                   <Icon size={18} />
                   <span className="text-xs font-semibold whitespace-nowrap">{step.label}</span>
                 </motion.div>
-                {i < workflowSteps.length - 1 && (
+                {i < steps.length - 1 && (
                   <span className="text-slate-600 text-lg font-light hidden sm:block">→</span>
                 )}
               </div>
@@ -82,7 +106,7 @@ export default function Workflow() {
             <GitBranch size={16} className="text-slate-400" />
             <span className="text-slate-300 font-semibold text-sm">Code Quality & GitHub Practices</span>
             <a
-              href={contactConfig.github}
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-auto text-xs text-cyan-400 hover:underline"
@@ -97,7 +121,7 @@ export default function Workflow() {
             viewport={{ once: true }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-700/20"
           >
-            {githubPractices.map(({ label, desc }) => (
+            {practices.map(({ label, desc }) => (
               <motion.div
                 key={label}
                 variants={cardVariants}

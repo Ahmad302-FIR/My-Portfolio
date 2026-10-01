@@ -8,6 +8,12 @@ const routeTitleMap: Record<string, string> = {
   '/admin/projects': 'Project Management',
   '/admin/projects/new': 'Create New Project',
   '/admin/messages': 'Contact Inquiries',
+  '/admin/content/hero': 'Profile & Hero Content',
+  '/admin/content/about': 'About Section Content',
+  '/admin/content/skills': 'Skills & Capabilities Management',
+  '/admin/content/experience': 'Work Experience & History',
+  '/admin/content/social': 'Social & Contact Channels',
+  '/admin/content/workflow': 'Engineering Workflow & Practices',
   '/admin/settings': 'Portfolio & Profile Settings',
 };
 
@@ -25,7 +31,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="flex h-screen w-full bg-[#07111F] text-slate-100 overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-slate-50 dark:bg-[#07111F] text-slate-900 dark:text-slate-100 overflow-hidden font-sans">
       {/* Sidebar */}
       <AdminSidebar
         isCollapsed={isCollapsed}
@@ -41,7 +47,7 @@ export default function AdminLayout() {
           onOpenMobileMenu={() => setIsMobileOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-gradient-to-b from-[#07111F] to-[#0A1424]">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50 dark:bg-gradient-to-b dark:from-[#07111F] dark:to-[#0A1424]">
           <div className="mx-auto max-w-6xl">
             <Outlet />
           </div>

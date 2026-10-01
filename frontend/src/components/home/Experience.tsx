@@ -2,8 +2,9 @@ import { motion } from 'framer-motion';
 import { Briefcase, GraduationCap } from 'lucide-react';
 import SectionWrapper from '../common/SectionWrapper';
 import SectionHeading from '../common/SectionHeading';
-import { experiences } from '../../data/portfolioData';
+import { experiences as defaultExperiences } from '../../data/portfolioData';
 import { staggerContainer, slideInLeft } from '../../utils/animations';
+import { usePortfolioSettings } from '../../context/PortfolioContext';
 
 const iconMap: Record<string, React.ElementType> = {
   'smit-internship': Briefcase,
@@ -16,6 +17,13 @@ const colorMap: Record<string, string> = {
 };
 
 export default function Experience() {
+  const { experiences } = usePortfolioSettings();
+
+  const activeExperiences =
+    experiences && experiences.length > 0
+      ? experiences.filter((e) => e.active !== false)
+      : defaultExperiences;
+
   return (
     <SectionWrapper id="experience" className="py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -36,13 +44,20 @@ export default function Experience() {
           <div className="absolute left-6 top-6 bottom-6 w-px bg-gradient-to-b from-cyan-400/40 via-violet-400/30 to-transparent hidden sm:block" />
 
           <div className="space-y-8">
-            {experiences.map((exp) => {
-              const Icon = iconMap[exp.id] ?? Briefcase;
-              const color = colorMap[exp.id] ?? 'border-slate-600/40 bg-slate-800/20 text-slate-400';
+            {activeExperiences.map((exp, idx) => {
+              const expKey = (exp as any)._id || exp.id || `exp-${idx}`;
+              const isCurrent = Boolean((exp as any).current);
+              const Icon =
+                (exp.id && iconMap[exp.id]) || (isCurrent ? Briefcase : GraduationCap);
+              const color =
+                (exp.id && colorMap[exp.id]) ||
+                (isCurrent
+                  ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-400'
+                  : 'border-violet-400/40 bg-violet-400/10 text-violet-400');
 
               return (
                 <motion.article
-                  key={exp.id}
+                  key={expKey}
                   variants={slideInLeft}
                   className="flex gap-5 sm:gap-8"
                   aria-label={`${exp.role} at ${exp.company}`}
@@ -71,7 +86,7 @@ export default function Experience() {
                     </div>
 
                     <ul className="space-y-2">
-                      {exp.points.map((point, i) => (
+                      {(exp.points || []).map((point, i) => (
                         <li key={i} className="flex items-start gap-2.5 text-sm text-slate-400 leading-relaxed">
                           <span className="h-1.5 w-1.5 rounded-full bg-cyan-400/60 mt-2 flex-shrink-0" />
                           {point}

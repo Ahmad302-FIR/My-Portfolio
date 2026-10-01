@@ -20,7 +20,7 @@ export const ENV = {
   MONGODB_URI: parseMongoUri(),
   JWT_SECRET: process.env.JWT_SECRET || 'dev_secret_jwt_portfolio_2026_default',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
+  FRONTEND_URL: process.env.FRONTEND_URL || (process.env.NODE_ENV !== 'production' ? 'http://localhost:5173' : ''),
 
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || '',
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || '',

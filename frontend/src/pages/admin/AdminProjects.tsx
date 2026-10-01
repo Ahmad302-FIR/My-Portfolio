@@ -17,6 +17,7 @@ import StatusBadge from '../../components/admin/common/StatusBadge';
 import ConfirmModal from '../../components/admin/common/ConfirmModal';
 import Toast, { type ToastMessage } from '../../components/admin/common/Toast';
 import ProjectDetailsModal from '../../components/projects/ProjectDetailsModal';
+import CustomDropdown from '../../components/admin/common/CustomDropdown';
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -49,11 +50,26 @@ export default function AdminProjects() {
     loadProjects();
   }, []);
 
-  // Distinct categories list
-  const categories = useMemo(() => {
+  // Dropdown options
+  const statusOptions = [
+    { value: 'All', label: 'All' },
+    { value: 'Live', label: 'Live' },
+    { value: 'In Development', label: 'In Development' },
+    { value: 'Completed', label: 'Completed' },
+  ];
+
+  const categoryOptions = useMemo(() => {
     const set = new Set(projects.map((p) => p.category).filter(Boolean));
-    return ['All', ...Array.from(set)];
+    return [
+      { value: 'All', label: 'All' },
+      ...Array.from(set).map((c) => ({ value: c, label: c })),
+    ];
   }, [projects]);
+
+  const sortOptions = [
+    { value: 'order', label: 'Display Order' },
+    { value: 'date', label: 'Last Updated' },
+  ];
 
   // Filtered and sorted projects
   const filteredProjects = useMemo(() => {
@@ -123,15 +139,15 @@ export default function AdminProjects() {
       {/* Top action header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100">Project Catalog</h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Project Catalog</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Manage public portfolio projects, live demos, and technical specifications
           </p>
         </div>
 
         <Link
           to="/admin/projects/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-[#07111F] shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all self-start sm:self-auto"
         >
           <Plus size={16} />
           <span>Add Project</span>
@@ -139,71 +155,58 @@ export default function AdminProjects() {
       </div>
 
       {/* Search & Filter Controls */}
-      <div className="p-4 rounded-2xl border border-slate-700/60 bg-[#0D1828]/80 backdrop-blur-md flex flex-col lg:flex-row gap-3">
+      <div className="relative z-30 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/80 backdrop-blur-md flex flex-col lg:flex-row gap-3 shadow-xs dark:shadow-none">
         {/* Search */}
         <div className="relative flex-1">
           <Search
             size={15}
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
           />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by title, technology, or category..."
-            className="w-full rounded-xl border border-slate-700/70 bg-[#101D30] pl-10 pr-4 py-2 text-xs text-slate-200 placeholder:text-slate-600 focus:border-cyan-400/50 focus:outline-none focus:ring-1 focus:ring-cyan-400/20"
+            className="w-full rounded-xl border border-slate-200 dark:border-slate-700/70 bg-slate-50 dark:bg-[#101D30] pl-10 pr-4 py-2 text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/20"
           />
         </div>
 
         {/* Filter controls */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/60 bg-[#101D30] text-xs">
-            <Filter size={13} className="text-slate-500" />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-transparent text-slate-300 focus:outline-none cursor-pointer"
-            >
-              <option value="All" className="bg-[#101D30]">Status: All</option>
-              <option value="Live" className="bg-[#101D30]">Live</option>
-              <option value="In Development" className="bg-[#101D30]">In Development</option>
-              <option value="Completed" className="bg-[#101D30]">Completed</option>
-            </select>
-          </div>
+          <CustomDropdown
+            labelPrefix="Status"
+            icon={Filter}
+            value={statusFilter}
+            options={statusOptions}
+            onChange={(val) => setStatusFilter(val)}
+            menuWidth="min-w-[170px]"
+          />
 
           {/* Category Filter */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/60 bg-[#101D30] text-xs">
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-transparent text-slate-300 focus:outline-none cursor-pointer max-w-[150px] truncate"
-            >
-              {categories.map((c) => (
-                <option key={c} value={c} className="bg-[#101D30]">
-                  Category: {c}
-                </option>
-              ))}
-            </select>
-          </div>
+          <CustomDropdown
+            labelPrefix="Category"
+            value={categoryFilter}
+            options={categoryOptions}
+            onChange={(val) => setCategoryFilter(val)}
+            menuWidth="min-w-[240px]"
+          />
 
           {/* Sort By */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/60 bg-[#101D30] text-xs">
-            <ArrowUpDown size={13} className="text-slate-500" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'order' | 'date')}
-              className="bg-transparent text-slate-300 focus:outline-none cursor-pointer"
-            >
-              <option value="order" className="bg-[#101D30]">Sort: Display Order</option>
-              <option value="date" className="bg-[#101D30]">Sort: Last Updated</option>
-            </select>
-          </div>
+          <CustomDropdown
+            labelPrefix="Sort"
+            icon={ArrowUpDown}
+            value={sortBy}
+            options={sortOptions}
+            onChange={(val) => setSortBy(val as 'order' | 'date')}
+            menuWidth="min-w-[180px]"
+            align="right"
+          />
         </div>
       </div>
 
       {/* Projects Table & Card list */}
-      <div className="rounded-2xl border border-slate-700/60 bg-[#0D1828]/80 backdrop-blur-md overflow-hidden shadow-xl">
+      <div className="relative z-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-[#0D1828]/80 backdrop-blur-md overflow-hidden shadow-xs dark:shadow-xl">
         {loading ? (
           <div className="p-16 text-center text-xs text-slate-500">
             <span className="h-4 w-4 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin inline-block mr-2" />
@@ -214,35 +217,35 @@ export default function AdminProjects() {
             No projects matched your active filters.
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto no-scrollbar">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 bg-[#101D30]/60 text-slate-400 uppercase tracking-wider font-semibold">
-                  <th className="py-3.5 px-4">Order</th>
-                  <th className="py-3.5 px-4">Project</th>
-                  <th className="py-3.5 px-4">Category</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4 text-center">Featured</th>
-                  <th className="py-3.5 px-4">Live URL</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#101D30]/60 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
+                  <th className="py-3 px-3 w-12 text-center">#</th>
+                  <th className="py-3 px-3.5">Project</th>
+                  <th className="py-3 px-3">Category</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-3 text-center w-14">Featured</th>
+                  <th className="py-3 px-3">Live URL</th>
+                  <th className="py-3 px-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                 {filteredProjects.map((project) => (
                   <tr
                     key={project._id || project.id || project.slug}
-                    className="hover:bg-slate-800/30 transition-colors group"
+                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors group"
                   >
                     {/* Order column */}
-                    <td className="py-4 px-4 font-mono font-semibold text-slate-400">
+                    <td className="py-3 px-3 font-mono font-semibold text-slate-400 dark:text-slate-500 text-center w-12">
                       #{project.order}
                     </td>
 
                     {/* Project title + tech preview */}
-                    <td className="py-4 px-4 min-w-[220px]">
+                    <td className="py-3 px-3.5">
                       <div className="flex items-center gap-3">
                         <div
-                          className="h-10 w-10 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 border shadow-md"
+                          className="h-9 w-9 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 border shadow-xs"
                           style={{
                             backgroundColor: `${project.color || '#22D3EE'}15`,
                             borderColor: `${project.color || '#22D3EE'}40`,
@@ -252,15 +255,15 @@ export default function AdminProjects() {
                           {project.title[0]}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-slate-100 group-hover:text-cyan-400 transition-colors truncate">
+                          <p className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors truncate max-w-[180px] sm:max-w-xs md:max-w-none">
                             {project.title}
                           </p>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                            <span className="text-[10px] text-slate-500 font-mono">
+                            <span className="text-[10px] text-slate-500 font-mono whitespace-nowrap">
                               /{project.slug}
                             </span>
-                            <span className="text-[10px] text-slate-500">·</span>
-                            <span className="text-[10px] text-slate-400 truncate max-w-[120px]">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500">·</span>
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
                               {project.technologies.slice(0, 3).join(', ')}
                             </span>
                           </div>
@@ -269,24 +272,26 @@ export default function AdminProjects() {
                     </td>
 
                     {/* Category */}
-                    <td className="py-4 px-4 text-slate-400 whitespace-nowrap">
-                      {project.category}
+                    <td className="py-3 px-3 text-slate-600 dark:text-slate-400">
+                      <span className="truncate max-w-[140px] block" title={project.category}>
+                        {project.category}
+                      </span>
                     </td>
 
                     {/* Status badge */}
-                    <td className="py-4 px-4 whitespace-nowrap">
+                    <td className="py-3 px-3 whitespace-nowrap">
                       <StatusBadge status={project.status} size="sm" />
                     </td>
 
                     {/* Featured toggle */}
-                    <td className="py-4 px-4 text-center">
+                    <td className="py-3 px-3 text-center w-14">
                       <button
                         type="button"
                         onClick={() => handleToggleFeatured(project)}
                         className={`p-1.5 rounded-lg border transition-colors ${
                           project.featured
-                            ? 'border-violet-500/40 bg-violet-500/10 text-violet-400'
-                            : 'border-slate-800 bg-slate-800/40 text-slate-600 hover:text-slate-400'
+                            ? 'border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-400'
+                            : 'border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-600 hover:text-slate-700 dark:hover:text-slate-300'
                         }`}
                         title={
                           project.featured ? 'Featured on home' : 'Click to feature'
@@ -294,19 +299,19 @@ export default function AdminProjects() {
                       >
                         <Star
                           size={14}
-                          className={project.featured ? 'fill-violet-400' : ''}
+                          className={project.featured ? 'fill-violet-500 dark:fill-violet-400' : ''}
                         />
                       </button>
                     </td>
 
                     {/* Live URL */}
-                    <td className="py-4 px-4 whitespace-nowrap max-w-[180px]">
+                    <td className="py-3 px-3">
                       {project.liveUrl ? (
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:underline truncate max-w-[170px]"
+                          className="inline-flex items-center gap-1.5 text-xs text-cyan-600 dark:text-cyan-400 hover:underline truncate max-w-[140px]"
                         >
                           <ExternalLink size={12} className="flex-shrink-0" />
                           <span className="truncate">
@@ -314,24 +319,24 @@ export default function AdminProjects() {
                           </span>
                         </a>
                       ) : (
-                        <span className="text-slate-600 italic">None</span>
+                        <span className="text-slate-400 dark:text-slate-600 italic">None</span>
                       )}
                     </td>
 
                     {/* Actions */}
-                    <td className="py-4 px-4 text-right whitespace-nowrap">
+                    <td className="py-3 px-3 text-right whitespace-nowrap">
                       <div className="inline-flex items-center gap-1.5 justify-end">
                         <button
                           type="button"
                           onClick={() => setViewProject(project)}
-                          className="p-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 text-slate-300 hover:text-cyan-400 hover:border-cyan-400/40 transition-colors"
+                          className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-400/40 hover:bg-slate-200/50 transition-colors shadow-xs"
                           title="View Details"
                         >
                           <Eye size={13} />
                         </button>
                         <Link
                           to={`/admin/projects/edit/${project._id || project.slug}`}
-                          className="p-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 text-slate-300 hover:text-amber-400 hover:border-amber-400/40 transition-colors inline-block"
+                          className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-400/40 hover:bg-slate-200/50 transition-colors shadow-xs inline-block"
                           title="Edit Project"
                         >
                           <Edit2 size={13} />
@@ -339,7 +344,7 @@ export default function AdminProjects() {
                         <button
                           type="button"
                           onClick={() => setProjectToDelete(project)}
-                          className="p-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 text-slate-400 hover:text-rose-400 hover:border-rose-400/40 transition-colors"
+                          className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/40 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/40 hover:bg-slate-200/50 transition-colors shadow-xs"
                           title="Delete Project"
                         >
                           <Trash2 size={13} />

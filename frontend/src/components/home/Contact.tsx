@@ -1,58 +1,74 @@
-import { Mail, MapPin, Send, CheckCircle } from 'lucide-react';
+import { MapPin, Send, CheckCircle } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { GithubIcon, LinkedinIcon, WhatsAppIcon } from '../common/SocialIcons';
+import { GithubIcon, LinkedinIcon, WhatsAppIcon, GmailIcon } from '../common/SocialIcons';
 import SectionWrapper from '../common/SectionWrapper';
 import SectionHeading from '../common/SectionHeading';
+import TiltCard from '../common/TiltCard';
 import { fadeUpVariants } from '../../utils/animations';
 import { contactConfig } from '../../data/contact';
-
-const contactInfo = [
-  {
-    Icon: Mail,
-    label: 'Email',
-    value: contactConfig.email,
-    href: `mailto:${contactConfig.email}`,
-    color: 'text-cyan-400',
-  },
-  {
-    Icon: LinkedinIcon,
-    label: 'LinkedIn',
-    value: contactConfig.linkedinDisplay,
-    href: contactConfig.linkedin,
-    color: 'text-blue-400',
-  },
-  {
-    Icon: GithubIcon,
-    label: 'GitHub',
-    value: contactConfig.githubUsername,
-    href: contactConfig.github,
-    color: 'text-violet-400',
-  },
-  {
-    Icon: WhatsAppIcon,
-    label: 'WhatsApp',
-    value: contactConfig.phone,
-    href: contactConfig.whatsappUrl,
-    color: 'text-emerald-400',
-  },
-  {
-    Icon: MapPin,
-    label: 'Location',
-    value: contactConfig.location,
-    href: null,
-    color: 'text-teal-400',
-  },
-] as const;
-
 import { messageService } from '../../services/messageService';
+import { usePortfolioSettings } from '../../context/PortfolioContext';
 
 type Fields = { name: string; email: string; whatsappNumber: string; subject: string; message: string };
 
 export default function Contact() {
+  const { settings } = usePortfolioSettings();
   const formRef = useRef<HTMLFormElement>(null);
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const emailVal = settings.email || contactConfig.email;
+  const linkedinVal = settings.linkedin || contactConfig.linkedin;
+  const linkedinDisplay = settings.linkedinDisplay || settings.name || contactConfig.linkedinDisplay;
+  const githubVal = settings.github || contactConfig.github;
+  const githubUser = settings.githubUsername || contactConfig.githubUsername;
+  const whatsappUrlVal = settings.whatsappUrl || settings.whatsapp || contactConfig.whatsappUrl;
+  const phoneVal = settings.phone || contactConfig.phone;
+  const locationVal = settings.locationDetail || settings.location || contactConfig.location;
+
+  const contactInfo = [
+    {
+      Icon: GmailIcon,
+      label: 'Email',
+      value: emailVal,
+      href: `mailto:${emailVal}`,
+      brandClass: 'brand-icon-gmail',
+      bgClass: 'bg-[#EA4335]/10 border-[#EA4335]/30',
+    },
+    {
+      Icon: LinkedinIcon,
+      label: 'LinkedIn',
+      value: linkedinDisplay,
+      href: linkedinVal,
+      brandClass: 'brand-icon-linkedin',
+      bgClass: 'bg-[#0A66C2]/10 border-[#0A66C2]/30',
+    },
+    {
+      Icon: GithubIcon,
+      label: 'GitHub',
+      value: githubUser,
+      href: githubVal,
+      brandClass: 'brand-icon-github',
+      bgClass: 'bg-slate-200/90 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700/60',
+    },
+    {
+      Icon: WhatsAppIcon,
+      label: 'WhatsApp',
+      value: phoneVal,
+      href: whatsappUrlVal,
+      brandClass: 'brand-icon-whatsapp',
+      bgClass: 'bg-[#25D366]/10 border-[#25D366]/30',
+    },
+    {
+      Icon: MapPin,
+      label: 'Location',
+      value: locationVal,
+      href: null,
+      brandClass: 'text-teal-600 dark:text-teal-400',
+      bgClass: 'bg-teal-500/10 border-teal-500/30',
+    },
+  ];
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [honeypot, setHoneypot] = useState('');
   const [fields, setFields] = useState<Fields>({ name: '', email: '', whatsappNumber: '', subject: '', message: '' });
@@ -103,7 +119,7 @@ export default function Contact() {
   };
 
   const inputClass = (field: keyof Fields) =>
-    `w-full px-4 py-3 rounded-xl bg-[#101D30] border text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none focus:ring-1 transition-all duration-200 ${
+    `w-full px-4 py-3 rounded-xl bg-[#101D30] border text-slate-200 text-sm placeholder:text-slate-600 focus:outline-none transition-all duration-200 ${
       errors[field]
         ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20'
         : 'border-slate-700/50 focus:border-cyan-400/50 focus:ring-cyan-400/20'
@@ -128,14 +144,21 @@ export default function Contact() {
             viewport={{ once: true }}
             className="lg:col-span-2 flex flex-col gap-5"
           >
-            <div className="rounded-2xl border border-slate-700/40 bg-[#0D1828]/60 p-6 flex flex-col gap-4">
+            <TiltCard
+              maxTilt={6}
+              scale={1.01}
+              glare={true}
+              className="rounded-2xl border border-slate-700/40 bg-[#0D1828]/60 p-6 flex flex-col gap-4"
+            >
               <h3 className="text-slate-200 font-semibold text-base">Get in Touch</h3>
               
               <div className="space-y-3.5">
-                {contactInfo.map(({ Icon, label, value, href, color }) => (
+                {contactInfo.map(({ Icon, label, value, href, brandClass, bgClass }) => (
                   <div key={label} className="flex items-center gap-3">
-                    <div className={`h-9 w-9 rounded-lg border border-slate-700/40 bg-slate-800/40 flex items-center justify-center ${color} flex-shrink-0`}>
-                      <Icon size={16} />
+                    <div className={`h-9 w-9 rounded-lg border flex items-center justify-center flex-shrink-0 ${bgClass}`}>
+                      <span className={brandClass}>
+                        <Icon size={16} />
+                      </span>
                     </div>
                     <div className="min-w-0">
                       <p className="text-slate-500 text-xs">{label}</p>
@@ -168,7 +191,7 @@ export default function Contact() {
                   <span>Chat on WhatsApp</span>
                 </a>
               </div>
-            </div>
+            </TiltCard>
 
             {/* Availability badge */}
             <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4 flex items-start gap-3">

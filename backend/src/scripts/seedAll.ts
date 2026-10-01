@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { connectDB } from '../config/db';
 import { seedAdmin } from './seedAdmin';
 import { seedProjects } from './seedProjects';
+import { seedPortfolioContent } from './seedPortfolioContent';
 
 export const seedAll = async (): Promise<void> => {
   if (mongoose.connection.readyState !== 1) {
@@ -12,6 +13,7 @@ export const seedAll = async (): Promise<void> => {
   console.log('[Seed] Starting database seeding...');
   await seedAdmin();
   await seedProjects();
+  await seedPortfolioContent();
   console.log('[Seed] Database seeding completed successfully.');
 };
 

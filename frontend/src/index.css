@@ -26,6 +26,7 @@
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
     background: #07111F;
@@ -36,6 +37,17 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(34, 211, 238, 0.5);
+  }
+
+  /* Utility to completely hide scrollbar while keeping scrollability */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
   }
 
   /* Focus visible */
@@ -74,3 +86,401 @@
     @apply bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent;
   }
 }
+
+/* ========================================================================= */
+/* LIGHT MODE STYLES & COLOR OVERRIDES                                       */
+/* ========================================================================= */
+
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Universal Card & Surface Adapters for Light Mode */
+/* Matches ANY opacity variant of dark theme hex codes: /85, /60, /80, /90, etc. */
+html.light [class*="bg-[#0D1828]"],
+html.light [class*="bg-[#0d1828]"],
+html.light .bg-\[\#0D1828\],
+html.light .bg-\[\#0d1828\] {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+}
+
+/* Card headers, top bars, and secondary panels */
+html.light [class*="bg-[#101D30]"],
+html.light .bg-\[\#101D30\] {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Inner mockups, sub-containers, and browser window headers */
+html.light [class*="bg-[#0A1424]"],
+html.light [class*="bg-[#0a1424]"],
+html.light .bg-\[\#0A1424\],
+html.light .bg-\[\#0a1424\] {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Section backdrops */
+html.light [class*="bg-[#07111F]"]:not(.fixed),
+html.light .bg-\[\#07111F\] {
+  background-color: #F8FAFC !important;
+}
+
+/* Modal dark overlay scrim in light mode */
+html.light .fixed.inset-0[class*="bg-[#07111F]"] {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(8px);
+}
+
+html.light header {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-bottom-color: #E2E8F0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light footer {
+  background-color: #F1F5F9 !important;
+  border-top-color: #E2E8F0 !important;
+}
+
+/* Badges, tags, and small pill chips in light mode */
+html.light .bg-slate-800\/95,
+html.light .bg-slate-800\/90,
+html.light .bg-slate-800\/80,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/40,
+html.light .bg-slate-800\/30,
+html.light .bg-slate-800\/20,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/60 {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #334155 !important;
+}
+
+/* Specific button styles like View Details and Live Demo in light mode */
+html.light .project-live-btn,
+html.light a.project-live-btn {
+  background: linear-gradient(135deg, #0891B2, #0284C7) !important;
+  border-color: #0284C7 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(8, 145, 178, 0.3) !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+html.light .project-live-btn:hover,
+html.light a.project-live-btn:hover {
+  background: linear-gradient(135deg, #0e7490, #0369a1) !important;
+  border-color: #0369a1 !important;
+  box-shadow: 0 4px 16px rgba(8, 145, 178, 0.45) !important;
+  color: #FFFFFF !important;
+}
+html.light .project-live-btn svg {
+  color: #FFFFFF !important;
+}
+
+html.light .project-details-btn,
+html.light button.project-details-btn,
+html.light button.bg-slate-800\/40,
+html.light a.bg-slate-800\/40 {
+  background-color: #E2E8F0 !important;
+  border-color: #94A3B8 !important;
+  color: #0F172A !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+html.light .project-details-btn:hover,
+html.light button.project-details-btn:hover,
+html.light button.bg-slate-800\/40:hover,
+html.light a.bg-slate-800\/40:hover {
+  background-color: #CBD5E1 !important;
+  border-color: #64748B !important;
+  color: #020617 !important;
+}
+html.light .project-details-btn svg,
+html.light .project-details-btn .text-cyan-400 {
+  color: #0891B2 !important;
+}
+
+/* Social brand colors: Immune to light-mode text-slate overrides */
+.brand-icon-linkedin,
+[data-brand="linkedin"] {
+  color: #0A66C2 !important;
+}
+.brand-icon-whatsapp,
+[data-brand="whatsapp"] {
+  color: #25D366 !important;
+}
+.brand-icon-gmail,
+[data-brand="gmail"] {
+  color: #EA4335 !important;
+}
+.brand-icon-github,
+[data-brand="github"] {
+  color: #181717 !important;
+}
+html.dark .brand-icon-github,
+html.dark [data-brand="github"] {
+  color: #F0F6FC !important;
+}
+
+/* Text color adaptations */
+html.light .text-slate-50,
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300 {
+  color: #0F172A !important;
+}
+
+html.light .text-slate-400:not([class*="brand"]):not([data-brand]) {
+  color: #475569 !important;
+}
+
+html.light .text-slate-500:not([class*="brand"]):not([data-brand]),
+html.light .text-slate-600:not([class*="brand"]):not([data-brand]) {
+  color: #64748B !important;
+}
+
+/* Keep gradient text transparent with background clips */
+html.light .bg-clip-text {
+  color: transparent !important;
+}
+
+/* Keep gradient action button labels white */
+html.light button.bg-gradient-to-r,
+html.light a.bg-gradient-to-r,
+html.light .bg-gradient-to-r:not(.bg-clip-text) {
+  color: #FFFFFF !important;
+}
+html.light button.bg-gradient-to-r *,
+html.light a.bg-gradient-to-r * {
+  color: #FFFFFF !important;
+}
+
+/* Borders */
+html.light .border-slate-700,
+html.light .border-slate-800,
+html.light .border-slate-700\/30,
+html.light .border-slate-700\/40,
+html.light .border-slate-700\/50,
+html.light .border-slate-700\/60,
+html.light .border-slate-700\/70,
+html.light .border-slate-700\/80,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/80 {
+  border-color: #E2E8F0 !important;
+}
+
+/* Form inputs & textareas in light mode */
+html.light input,
+html.light textarea,
+html.light select {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Glass styling in light mode */
+html.light .glass {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Floating chips & badges in light mode */
+html.light .bg-\[\#0D1828\]\/90,
+html.light .bg-\[\#0D1828\]\/95 {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Skills Marquee fading edges in light mode */
+html.light .from-\[\#07111F\] {
+  --tw-gradient-from: #F8FAFC var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(248, 250, 252, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+/* Tinted cards in light mode (About highlights, Backend capabilities, Workflow steps) */
+html.light [class*="bg-cyan-400/10"]:not(header *):not(nav *):not(.nav-indicator-pill),
+html.light [class*="bg-violet-400/10"]:not(header *):not(nav *),
+html.light [class*="bg-teal-400/10"]:not(header *):not(nav *),
+html.light [class*="bg-amber-400/10"]:not(header *):not(nav *),
+html.light [class*="bg-rose-400/10"]:not(header *):not(nav *),
+html.light [class*="bg-emerald-400/10"]:not(header *):not(nav *) {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light [class*="bg-cyan-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-violet-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-teal-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-amber-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-rose-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-emerald-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-blue-400/5"]:not(header *):not(nav *),
+html.light [class*="bg-green-400/5"]:not(header *):not(nav *) {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 2px 10px -1px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Navbar active indicator in light mode */
+html.light .nav-indicator-pill,
+html.light header .nav-indicator-pill {
+  background-color: rgba(6, 182, 212, 0.12) !important;
+  border-color: rgba(6, 182, 212, 0.35) !important;
+  box-shadow: none !important;
+}
+
+/* Light mode tinted borders */
+html.light .border-cyan-400\/20,
+html.light .border-cyan-400\/30 {
+  border-color: rgba(6, 182, 212, 0.35) !important;
+}
+html.light .border-violet-400\/20,
+html.light .border-violet-400\/30 {
+  border-color: rgba(139, 92, 246, 0.35) !important;
+}
+html.light .border-teal-400\/20,
+html.light .border-teal-400\/30 {
+  border-color: rgba(20, 184, 166, 0.35) !important;
+}
+html.light .border-amber-400\/20,
+html.light .border-amber-400\/30 {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+html.light .border-rose-400\/20,
+html.light .border-rose-400\/30 {
+  border-color: rgba(244, 63, 94, 0.35) !important;
+}
+html.light .border-emerald-400\/20,
+html.light .border-emerald-400\/30 {
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+html.light .border-blue-400\/30 {
+  border-color: rgba(59, 130, 246, 0.35) !important;
+}
+html.light .border-green-400\/30 {
+  border-color: rgba(34, 197, 94, 0.35) !important;
+}
+
+/* Backend terminal code block inside light mode */
+html.light .bg-\[\#07111F\]:not(body) {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+}
+html.light .bg-\[\#07111F\]:not(body) pre,
+html.light .bg-\[\#07111F\]:not(body) code {
+  color: #0F172A !important;
+}
+
+/* Light mode scrollbar */
+html.light ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(14, 165, 233, 0.4);
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 165, 233, 0.6);
+}
+
+/* ========================================================================= */
+/* ADMIN DASHBOARD LIGHT MODE COMPATIBILITY                                  */
+/* ========================================================================= */
+
+/* Remove dark gradient overlays and stops in light mode (exclude rounded avatar elements) */
+html.light [class*="bg-gradient-to"][class*="from-[#0D1828]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#0d1828]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#07111F]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#07111f]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#101D30]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#0A1424]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]),
+html.light [class*="bg-gradient-to"][class*="from-[#112238]"]:not([class*="rounded-full"]):not([class*="rounded-b-full"]) {
+  background-image: none !important;
+  background-color: #FFFFFF !important;
+}
+
+/* Ensure avatar images and containers are never obstructed by light backgrounds */
+html.light img {
+  background-color: transparent !important;
+}
+
+/* Light mode high-contrast accessible accent colors on white/light surfaces */
+html.light .text-cyan-400:not([class*="brand"]):not([data-brand]) {
+  color: #0891B2 !important;
+}
+html.light .text-violet-400:not([class*="brand"]):not([data-brand]) {
+  color: #7C3AED !important;
+}
+html.light .text-teal-400:not([class*="brand"]):not([data-brand]) {
+  color: #0D9488 !important;
+}
+html.light .text-emerald-400:not([class*="brand"]):not([data-brand]) {
+  color: #059669 !important;
+}
+
+/* Specifically for admin welcome banner in light mode */
+html.light .admin-welcome-banner,
+html.light div.admin-welcome-banner {
+  background-image: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%) !important;
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 8px -2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light .admin-welcome-banner h2 {
+  color: #0F172A !important;
+}
+
+html.light .admin-welcome-banner p {
+  color: #64748B !important;
+}
+
+html.light .admin-welcome-banner a[href="/"] {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light .admin-welcome-banner a[href="/"]:hover {
+  background-color: #F8FAFC !important;
+  border-color: #94A3B8 !important;
+  color: #0F172A !important;
+}
+
+/* Admin layout main area */
+html.light main[class*="bg-gradient-to-b"] {
+  background-image: none !important;
+  background-color: #F8FAFC !important;
+}
+
+/* Dropdown option background & text in light mode */
+html.light option {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+/* Table row and admin item hover contrast in light mode */
+html.light tr:hover,
+html.light .hover\:bg-slate-800\/30:hover,
+html.light .hover\:bg-slate-800\/40:hover {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+}
+

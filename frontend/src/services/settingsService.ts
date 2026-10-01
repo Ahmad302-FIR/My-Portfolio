@@ -1,4 +1,5 @@
 import { api } from './api';
+import type { PortfolioSettingsData } from '../types/portfolio';
 
 export interface PortfolioSettingsPayload {
   name: string;
@@ -15,50 +16,54 @@ export interface PortfolioSettingsPayload {
   resumeUrl?: string;
 }
 
+export const formatResumeUrl = (url?: string): string => {
+  if (!url) return '/Muhammad-Ahmed-Resume.pdf';
+  if (url.includes('res.cloudinary.com') && url.includes('/raw/upload/')) {
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    return `${apiBase.replace(/\/api\/?$/, '')}/api/resume`;
+  }
+  if (url.startsWith('/api')) {
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    return `${apiBase.replace(/\/api\/?$/, '')}${url}`;
+  }
+  return url;
+};
+
 export const settingsService = {
   /**
    * Fetch portfolio settings: GET /api/settings
    */
-  async getPortfolioSettings(): Promise<PortfolioSettingsPayload & { resumeUrl?: string }> {
+  async getPortfolioSettings(): Promise<PortfolioSettingsData> {
     const res = await api.get('/settings');
     const s = res.data.data || {};
     return {
-      name: s.name || 'Muhammad Ahmed',
-      email: s.email || 'info.ahmadkhan.com@gmail.com',
-      phone: s.phone || '+92 329 5664981',
-      location: s.location || 'Pakistan (Remote / Worldwide)',
-      linkedin: s.linkedin || 'https://www.linkedin.com/in/muhammad-ahmed-6867a5370',
-      github: s.github || 'https://github.com/Ahmad302-FIR',
-      whatsappUrl: s.whatsapp || 'https://wa.me/923295664981',
-      availability: s.availability || 'Available for freelance & full-time roles',
-      heroTitle: s.heroHeadline || 'Muhammad Ahmed',
-      heroSubtitle: s.heroRole || 'Full Stack MERN Developer',
-      shortBio:
-        s.shortBio ||
-        'I build complete web products — from responsive frontend interfaces to secure backend APIs, databases, authentication, and production deployment.',
-      resumeUrl: s.resumeUrl || '/Muhammad-Ahmed-Resume.pdf',
+      ...s,
+      resumeUrl: formatResumeUrl(s.resumeUrl),
     };
   },
 
   /**
-   * Save / update portfolio text and profile settings: PUT /api/settings
+   * Save / update portfolio settings: PUT /api/settings
    */
-  async updatePortfolioSettings(data: PortfolioSettingsPayload): Promise<boolean> {
-    const payload = {
-      name: data.name,
-      email: data.email,
-      location: data.location,
-      linkedin: data.linkedin,
-      github: data.github,
-      whatsapp: data.whatsappUrl,
-      availability: data.availability,
-      heroHeadline: data.heroTitle,
-      heroRole: data.heroSubtitle,
-      shortBio: data.shortBio,
-    };
+  async updatePortfolioSettings(data: Partial<PortfolioSettingsData>): Promise<PortfolioSettingsData> {
+    const res = await api.put('/settings', data);
+    return res.data.data;
+  },
 
-    await api.put('/settings', payload);
-    return true;
+  /**
+   * Upload profile image to Cloudinary: POST /api/uploads/profile-image
+   */
+  async uploadProfileImage(file: File): Promise<{ url: string; publicId: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const res = await api.post('/uploads/profile-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data.data;
   },
 
   /**
@@ -77,7 +82,7 @@ export const settingsService = {
     return {
       success: true,
       filename: file.name,
-      resumeUrl: res.data.data?.resumeUrl || '',
+      resumeUrl: formatResumeUrl(res.data.data?.resumeUrl),
     };
   },
 

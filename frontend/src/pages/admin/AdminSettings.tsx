@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { contactConfig } from '../../data/contact';
 import { settingsService } from '../../services/settingsService';
+import { usePortfolioSettings } from '../../context/PortfolioContext';
 import ResumeUpload from '../../components/admin/common/ResumeUpload';
 import Toast, { type ToastMessage } from '../../components/admin/common/Toast';
 
@@ -33,6 +34,8 @@ interface PortfolioFormState {
 }
 
 export default function AdminSettings() {
+  const { refreshSettings } = usePortfolioSettings();
+
   // 1. Portfolio & Profile Form State
   const [profile, setProfile] = useState<PortfolioFormState>(() => {
     if (typeof window !== 'undefined') {
@@ -155,6 +158,7 @@ export default function AdminSettings() {
         setCurrentResumeName(res.filename || selectedResumeFile.name);
       }
       setSelectedResumeFile(null);
+      await refreshSettings();
       setToast({
         id: String(Date.now()),
         type: 'success',
@@ -393,7 +397,7 @@ export default function AdminSettings() {
             <button
               type="submit"
               disabled={isSavingPortfolio}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-[#07111F] shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 transition-all disabled:opacity-50"
             >
               <Save size={15} />
               <span>{isSavingPortfolio ? 'Saving Changes...' : 'Save Portfolio Settings'}</span>
@@ -471,7 +475,7 @@ export default function AdminSettings() {
           <button
             type="submit"
             disabled={isUpdatingResume || !selectedResumeFile}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-bold text-[#07111F] shadow-lg shadow-teal-500/20 hover:shadow-teal-500/35 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-bold text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/35 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Save size={15} />
             <span>{isUpdatingResume ? 'Updating Resume...' : 'Update Resume'}</span>

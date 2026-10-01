@@ -6,7 +6,19 @@ export type ActivityType =
   | 'project_deleted'
   | 'resume_updated'
   | 'password_changed'
-  | 'settings_updated';
+  | 'settings_updated'
+  | 'profile_updated'
+  | 'profile_image_updated'
+  | 'social_links_updated'
+  | 'about_updated'
+  | 'workflow_updated'
+  | 'skill_created'
+  | 'skill_updated'
+  | 'skill_deleted'
+  | 'skills_reordered'
+  | 'experience_created'
+  | 'experience_updated'
+  | 'experience_deleted';
 
 export interface IActivity extends Document {
   type: ActivityType;
@@ -26,6 +38,18 @@ const activitySchema = new Schema<IActivity>(
         'resume_updated',
         'password_changed',
         'settings_updated',
+        'profile_updated',
+        'profile_image_updated',
+        'social_links_updated',
+        'about_updated',
+        'workflow_updated',
+        'skill_created',
+        'skill_updated',
+        'skill_deleted',
+        'skills_reordered',
+        'experience_created',
+        'experience_updated',
+        'experience_deleted',
       ],
     },
     description: {

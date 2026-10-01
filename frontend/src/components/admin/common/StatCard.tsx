@@ -23,7 +23,7 @@ export default function StatCard({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay }}
-      className="relative rounded-2xl border border-slate-700/50 bg-[#0D1828]/80 p-5 backdrop-blur-md overflow-hidden flex flex-col justify-between"
+      className="relative rounded-2xl border border-slate-200/80 dark:border-slate-700/50 bg-white dark:bg-[#0D1828]/80 p-5 backdrop-blur-md overflow-hidden flex flex-col justify-between shadow-xs dark:shadow-none"
     >
       {/* Glow accent */}
       <div
@@ -33,16 +33,16 @@ export default function StatCard({
 
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             {label}
           </p>
-          <h3 className="mt-2 text-3xl font-bold tracking-tight text-slate-100">
+          <h3 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             {value}
           </h3>
         </div>
 
         <div
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/5"
+          className="flex h-11 w-11 items-center justify-center rounded-xl border border-black/5 dark:border-white/5"
           style={{
             backgroundColor: `${color}15`,
             color: color,

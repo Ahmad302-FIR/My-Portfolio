@@ -16,6 +16,9 @@ import settingsRoutes from './routes/settingsRoutes';
 import resumeRoutes from './routes/resumeRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import dashboardRoutes from './routes/dashboardRoutes';
+import portfolioRoutes from './routes/portfolioRoutes';
+import skillRoutes from './routes/skillRoutes';
+import experienceRoutes from './routes/experienceRoutes';
 
 export const createApp = (): Application => {
   const app = express();
@@ -61,6 +64,50 @@ export const createApp = (): Application => {
   const uploadsDir = path.resolve(__dirname, '../uploads');
   app.use('/uploads', express.static(uploadsDir));
 
+  const getPublicFrontendUrl = (): string | undefined => {
+    const configured = (ENV.FRONTEND_URL || '').trim();
+    if (configured) {
+      return configured;
+    }
+    return ENV.NODE_ENV !== 'production' ? 'http://localhost:5173' : undefined;
+  };
+
+  // Root endpoint
+  app.get('/', (req: Request, res: Response) => {
+    const frontend = getPublicFrontendUrl();
+    res.status(200).json({
+      success: true,
+      message: 'Muhammad Ahmed Portfolio API',
+      status: 'active',
+      ...(frontend ? { frontend } : {}),
+      endpoints: {
+        health: '/api/health',
+        projects: '/api/projects',
+        settings: '/api/settings',
+        messages: '/api/messages',
+      },
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  // API index endpoint
+  app.get('/api', (req: Request, res: Response) => {
+    const frontend = getPublicFrontendUrl();
+    res.status(200).json({
+      success: true,
+      message: 'Portfolio API Base',
+      status: 'active',
+      ...(frontend ? { frontend } : {}),
+      endpoints: {
+        health: '/api/health',
+        projects: '/api/projects',
+        settings: '/api/settings',
+        messages: '/api/messages',
+      },
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   // Health check
   app.get('/api/health', (req: Request, res: Response) => {
     res.status(200).json({
@@ -76,10 +123,14 @@ export const createApp = (): Application => {
   });
 
   // API Routes
+  app.use('/api/portfolio', portfolioRoutes);
+  app.use('/api/skills', skillRoutes);
+  app.use('/api/experience', experienceRoutes);
   app.use('/api/auth', authRoutes);
   app.use('/api/projects', projectRoutes);
   app.use('/api/messages', messageRoutes);
   app.use('/api/settings', settingsRoutes);
+  app.use('/api/resume', resumeRoutes);
   app.use('/api/admin/resume', resumeRoutes);
   app.use('/api/admin', dashboardRoutes);
   app.use('/api/uploads', uploadRoutes);
