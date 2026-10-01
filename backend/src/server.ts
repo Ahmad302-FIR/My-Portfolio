@@ -1,4 +1,4 @@
-import { createApp } from './app';
+import app from './app';
 import { connectDB } from './config/db';
 import { ENV } from './config/env';
 import { seedProjects } from './scripts/seedProjects';
@@ -6,8 +6,6 @@ import { seedAdmin } from './scripts/seedAdmin';
 
 const startServer = async () => {
   try {
-    const app = createApp();
-
     const server = app.listen(ENV.PORT, () => {
       console.log(`===============================================`);
       console.log(`🚀 Portfolio Backend running on http://localhost:${ENV.PORT}`);
@@ -16,7 +14,7 @@ const startServer = async () => {
       console.log(`===============================================`);
     });
 
-    // Asynchronously connect to MongoDB and seed if collections are empty
+    // Asynchronously connect to MongoDB and seed if collections are empty (in dev/persistent server)
     connectDB()
       .then(async (isConnected) => {
         if (isConnected) {
@@ -44,4 +42,10 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Start the HTTP port listener only if run as a standalone process (node dist/server.js, local tsx)
+// In serverless environments like Vercel, process.env.VERCEL is defined, so app.listen is bypassed
+if (!process.env.VERCEL && require.main === module) {
+  startServer();
+}
+
+export default app;

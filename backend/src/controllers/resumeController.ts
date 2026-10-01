@@ -80,22 +80,22 @@ export const uploadResume = asyncHandler(async (req: Request, res: Response) => 
   settings.resumeContentType = req.file.mimetype || 'application/pdf';
   settings.resumeFileName = req.file.originalname || 'Muhammad-Ahmed-Resume.pdf';
 
-  // 2. Also save to local uploads directory for fast fallback
-  const uploadsDir = path.resolve(__dirname, '../../uploads');
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-  }
-  fs.writeFileSync(path.join(uploadsDir, 'Muhammad-Ahmed-Resume.pdf'), req.file.buffer);
+  // 2. Also save to local uploads directory for fast fallback in dev (safely ignored in serverless)
+  try {
+    const uploadsDir = path.resolve(__dirname, '../../uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(uploadsDir, 'Muhammad-Ahmed-Resume.pdf'), req.file.buffer);
 
-  // Sync to frontend/public if directory is accessible
-  const frontendPublicDir = path.resolve(__dirname, '../../../frontend/public');
-  if (fs.existsSync(frontendPublicDir)) {
-    try {
+    // Sync to frontend/public if directory is accessible
+    const frontendPublicDir = path.resolve(__dirname, '../../../frontend/public');
+    if (fs.existsSync(frontendPublicDir)) {
       fs.writeFileSync(path.join(frontendPublicDir, 'Muhammad-Ahmed-Resume.pdf'), req.file.buffer);
       fs.writeFileSync(path.join(frontendPublicDir, 'resume.pdf'), req.file.buffer);
-    } catch {
-      // Ignore if frontend public directory is not writable
     }
+  } catch (fsErr) {
+    // Read-only filesystem in serverless environments (Vercel) is normal and safe
   }
 
   // 3. Delete previous Cloudinary asset if present

@@ -1,13 +1,29 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env file
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Load local .env files if present (no error if absent in production)
+const candidateEnvPaths = [
+  path.resolve(__dirname, '../../.env'),
+  path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), 'backend/.env'),
+];
+
+for (const envPath of candidateEnvPaths) {
+  try {
+    dotenv.config({ path: envPath });
+  } catch {
+    // Ignore in serverless environments
+  }
+}
 
 const parseMongoUri = (): string => {
   let uri = (process.env.MONGODB_URI || '').trim();
   while (uri.startsWith('MONGODB_URI=')) {
     uri = uri.replace(/^MONGODB_URI=/, '').trim();
+  }
+  // In production, do not fallback to localhost if empty
+  if (!uri && process.env.NODE_ENV === 'production') {
+    return '';
   }
   return uri || 'mongodb://127.0.0.1:27017/portfolio';
 };
@@ -35,4 +51,19 @@ export const ENV = {
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'info.ahmadkhan.com@gmail.com',
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || '',
   ADMIN_NAME: process.env.ADMIN_NAME || 'Muhammad Ahmed',
+};
+
+/**
+ * Validate presence of production variables without throwing unhandled exceptions
+ */
+export const validateProductionEnv = (): { valid: boolean; missing: string[] } => {
+  const missing: string[] = [];
+  if (ENV.NODE_ENV === 'production') {
+    if (!process.env.MONGODB_URI) missing.push('MONGODB_URI');
+    if (!process.env.JWT_SECRET) missing.push('JWT_SECRET');
+  }
+  return {
+    valid: missing.length === 0,
+    missing,
+  };
 };

@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { ENV } from './config/env';
+import { connectDB } from './config/db';
 import { errorHandler } from './middleware/errorMiddleware';
 import { ApiError } from './utils/ApiError';
 
@@ -72,6 +73,16 @@ export const createApp = (): Application => {
     return ENV.NODE_ENV !== 'production' ? 'http://localhost:5173' : undefined;
   };
 
+  // Serverless MongoDB connection assurance middleware
+  app.use(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await connectDB();
+    } catch (err) {
+      console.warn('[MongoDB Middleware Notice]:', err);
+    }
+    next();
+  });
+
   // Root endpoint
   app.get('/', (req: Request, res: Response) => {
     const frontend = getPublicFrontendUrl();
@@ -110,12 +121,16 @@ export const createApp = (): Application => {
 
   // Health check
   app.get('/api/health', (req: Request, res: Response) => {
+    const isConnected = mongoose.connection.readyState === 1;
+    const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
     res.status(200).json({
       success: true,
       message: 'Portfolio Backend API is running healthy',
+      environment: ENV.NODE_ENV,
       database: {
-        connected: mongoose.connection.readyState === 1,
-        name: mongoose.connection.readyState === 1 ? mongoose.connection.name : 'disconnected',
+        connected: isConnected,
+        name: isConnected ? mongoose.connection.name : 'disconnected',
+        state: states[mongoose.connection.readyState] || 'unknown',
       },
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),
@@ -145,3 +160,6 @@ export const createApp = (): Application => {
 
   return app;
 };
+
+export const app: Application = createApp();
+export default app;
